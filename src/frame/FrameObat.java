@@ -28,6 +28,29 @@ private void tampilData() {
         }
         tblObat.setModel(model);
     }
+private void tampilCari(String keyword) {
+    DefaultTableModel model = new DefaultTableModel();
+    model.addColumn("ID Obat");
+    model.addColumn("Nama Obat");
+    model.addColumn("Jenis");
+    model.addColumn("Stok");
+    model.addColumn("Harga");
+
+    ArrayList<obat> list = obat.cari(keyword);
+    for (obat o : list) {
+        Object[] row = {
+            o.getId_obat(),
+            o.getNama_obat(),
+            o.getJenis(),
+            o.getStok(),
+            o.getHarga()
+        };
+        model.addRow(row);
+    }
+
+    tblObat.setModel(model); // pastikan nama JTable sesuai dengan di form kamu
+}
+
     /**
      * Creates new form FrameObat
      */
@@ -73,6 +96,7 @@ private void tampilData() {
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblObat = new javax.swing.JTable();
+        txtCari = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,6 +153,18 @@ private void tampilData() {
 
         jScrollPane2.setViewportView(jScrollPane1);
 
+        txtCari.setText("Cari");
+        txtCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCariActionPerformed(evt);
+            }
+        });
+        txtCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCariKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -167,8 +203,10 @@ private void tampilData() {
                                 .addGap(30, 30, 30)
                                 .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(26, 26, 26)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(273, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(190, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,7 +233,8 @@ private void tampilData() {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambah)
@@ -241,6 +280,21 @@ obat.tambah(
 tampilData();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnTampilActionPerformed
+
+    private void txtCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCariActionPerformed
+
+      // TODO add your handling code here:
+    }//GEN-LAST:event_txtCariActionPerformed
+
+    private void txtCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCariKeyReleased
+    String keyword = txtCari.getText().trim();
+    if (keyword.isEmpty()) {
+        tampilData(); // tampilkan semua data
+    } else {
+        tampilCari(keyword); // tampilkan hasil pencarian
+    }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCariKeyReleased
 
     /**
      * @param args the command line arguments
@@ -290,6 +344,7 @@ tampilData();
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblObat;
+    private javax.swing.JTextField txtCari;
     private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtJenis;

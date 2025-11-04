@@ -56,6 +56,38 @@ public class periksa {
     }
 
     // -----------------------------
+// Cari data periksa berdasarkan diagnosa atau tindakan
+// -----------------------------
+public static ArrayList<periksa> cari(String keyword) {
+    ArrayList<periksa> list = new ArrayList<>();
+    try {
+        Connection conn = koneksi.getConnection();
+        String sql = "SELECT * FROM periksa WHERE diagnosa LIKE ? OR tindakan LIKE ?";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setString(1, "%" + keyword + "%");
+        pst.setString(2, "%" + keyword + "%");
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            periksa p = new periksa();
+            p.id_periksa = rs.getInt("id_periksa");
+            p.id_pasien = rs.getInt("id_pasien");
+            p.id_tenaga = rs.getInt("id_tenaga");
+            p.tanggal = rs.getString("tanggal");
+            p.diagnosa = rs.getString("diagnosa");
+            p.tindakan = rs.getString("tindakan");
+            list.add(p);
+        }
+
+        rs.close();
+        pst.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error cari data: " + e.getMessage());
+    }
+    return list;
+}
+
+    // -----------------------------
     // Tambah data periksa
     // -----------------------------
     public static void tambah(int id_pasien, int id_tenaga, String tanggal, String diagnosa, String tindakan) {

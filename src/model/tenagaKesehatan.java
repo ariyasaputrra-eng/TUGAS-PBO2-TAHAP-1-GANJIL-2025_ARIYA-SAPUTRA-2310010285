@@ -58,6 +58,38 @@ public class tenagaKesehatan {
     }
 
     // -----------------------------
+// Cari data tenaga kesehatan berdasarkan nama atau profesi
+// -----------------------------
+public static ArrayList<tenagaKesehatan> cari(String keyword) {
+    ArrayList<tenagaKesehatan> list = new ArrayList<>();
+    try {
+        Connection conn = koneksi.getConnection();
+        String sql = "SELECT * FROM tenaga_kesehatan WHERE nama LIKE ? OR profesi LIKE ?";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setString(1, "%" + keyword + "%");
+        pst.setString(2, "%" + keyword + "%");
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            tenagaKesehatan t = new tenagaKesehatan();
+            t.id_tenaga = rs.getInt("id_tenaga");
+            t.nama = rs.getString("nama");
+            t.profesi = rs.getString("profesi");
+            t.jenis_kelamin = rs.getString("jenis_kelamin");
+            t.usia = rs.getInt("usia");
+            t.alamat = rs.getString("alamat");
+            list.add(t);
+        }
+
+        rs.close();
+        pst.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error cari data: " + e.getMessage());
+    }
+    return list;
+}
+
+    // -----------------------------
     // Tambah data tenaga kesehatan
     // -----------------------------
     public static void tambah(String nama, String profesi, String jk, int usia, String alamat) {

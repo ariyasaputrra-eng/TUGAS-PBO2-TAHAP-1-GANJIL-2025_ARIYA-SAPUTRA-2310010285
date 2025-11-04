@@ -54,6 +54,35 @@ public class pasien {
     }
 
     // -----------------------------
+// Cari data pasien berdasarkan nama atau alamat
+// -----------------------------
+public static ArrayList<pasien> cari(String keyword) {
+    ArrayList<pasien> list = new ArrayList<>();
+    try {
+        Connection conn = koneksi.getConnection();
+        String sql = "SELECT * FROM pasien WHERE nama LIKE ? OR alamat LIKE ?";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setString(1, "%" + keyword + "%");
+        pst.setString(2, "%" + keyword + "%");
+        ResultSet rs = pst.executeQuery();
+
+        while (rs.next()) {
+            pasien p = new pasien();
+            p.id_pasien = rs.getInt("id_pasien");
+            p.nama = rs.getString("nama");
+            p.ttl = rs.getString("ttl");
+            p.jenis_kelamin = rs.getString("jenis_kelamin");
+            p.alamat = rs.getString("alamat");
+            list.add(p);
+        }
+        rs.close();
+        pst.close();
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error cari data: " + e.getMessage());
+    }
+    return list;
+}
+    // -----------------------------
     // Tambah data pasien
     // -----------------------------
     public static void tambah(String nama, String ttl, String jk, String alamat) {

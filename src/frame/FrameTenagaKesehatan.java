@@ -33,6 +33,26 @@ public class FrameTenagaKesehatan extends javax.swing.JFrame {
         tblTenaga.setModel(model);
     }
 
+private void tampilCari(String keyword) {
+    DefaultTableModel model = new DefaultTableModel(
+        new String[]{"ID", "Nama", "Profesi", "JK", "Usia", "Alamat"}, 0
+    );
+
+    ArrayList<tenagaKesehatan> list = tenagaKesehatan.cari(keyword);
+
+    for (tenagaKesehatan t : list) {
+        model.addRow(new Object[]{
+            t.getId_tenaga(),
+            t.getNama(),
+            t.getProfesi(),
+            t.getJenis_kelamin(),
+            t.getUsia(),
+            t.getAlamat()
+        });
+    }
+
+    tblTenaga.setModel(model);
+}
 
     /**
      * Creates new form FrameTenagaKesehatan
@@ -84,6 +104,7 @@ public class FrameTenagaKesehatan extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblTenaga = new javax.swing.JTable();
+        txtCari = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -148,6 +169,13 @@ public class FrameTenagaKesehatan extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(jScrollPane1);
 
+        txtCari.setText("Cari");
+        txtCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCariKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -174,7 +202,9 @@ public class FrameTenagaKesehatan extends javax.swing.JFrame {
                                     .addComponent(txtProfesi, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(btnTambah)
@@ -184,7 +214,7 @@ public class FrameTenagaKesehatan extends javax.swing.JFrame {
                         .addComponent(btnHapus)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnTampil)))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,7 +248,9 @@ public class FrameTenagaKesehatan extends javax.swing.JFrame {
                         .addGap(33, 33, 33))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(95, 95, 95)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTambah)
@@ -274,6 +306,16 @@ tampilData();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnTampilActionPerformed
 
+    private void txtCariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCariKeyReleased
+String keyword = txtCari.getText().trim();
+    if (keyword.isEmpty()) {
+        tampilData();
+    } else {
+        tampilCari(keyword);
+    }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCariKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -324,6 +366,7 @@ tampilData();
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblTenaga;
     private javax.swing.JTextField txtAlamat;
+    private javax.swing.JTextField txtCari;
     private javax.swing.JTextField txtID;
     private javax.swing.JTextField txtJK;
     private javax.swing.JTextField txtNama;

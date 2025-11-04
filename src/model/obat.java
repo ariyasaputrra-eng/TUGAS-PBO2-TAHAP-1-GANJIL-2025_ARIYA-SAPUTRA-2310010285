@@ -3,12 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
+
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import configDB.koneksi;
+
 /**
- *
+ * Model Obat
+ * CRUD + Fitur Cari
  * @author ACER
  */
 public class obat {
@@ -48,6 +51,36 @@ public class obat {
             stmt.close();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error tampil data: " + e.getMessage());
+        }
+        return list;
+    }
+
+    // -----------------------------
+    // Cari data obat berdasarkan nama atau jenis
+    // -----------------------------
+    public static ArrayList<obat> cari(String keyword) {
+        ArrayList<obat> list = new ArrayList<>();
+        try {
+            Connection conn = koneksi.getConnection();
+            String sql = "SELECT * FROM obat WHERE nama_obat LIKE ? OR jenis LIKE ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, "%" + keyword + "%");
+            pst.setString(2, "%" + keyword + "%");
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                obat o = new obat();
+                o.id_obat = rs.getInt("id_obat");
+                o.nama_obat = rs.getString("nama_obat");
+                o.jenis = rs.getString("jenis");
+                o.stok = rs.getInt("stok");
+                o.harga = rs.getDouble("harga");
+                list.add(o);
+            }
+            rs.close();
+            pst.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error cari data: " + e.getMessage());
         }
         return list;
     }
